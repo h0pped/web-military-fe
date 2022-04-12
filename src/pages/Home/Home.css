@@ -1,0 +1,140 @@
+#landing{
+    min-height: 100vh;
+    background:linear-gradient(
+        rgba(0, 0, 0, 0.3), 
+        rgba(0, 0, 0, 0.3)
+      ),url("https://images.unsplash.com/photo-1602901248692-06c8935adac0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80");
+    background-position: center;
+    background-size: cover;
+    color:white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#new-arrivals{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-weight: 600;
+
+}
+#new-arrivals .grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 5rem;
+    row-gap: 2rem;
+}
+#new-arrivals .grid .item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+
+}
+#new-arrivals .grid .item a{
+    text-decoration: none;
+    color:black;
+    text-align: center;
+}
+#new-arrivals .grid .item .img{
+    width: 300px;
+    height: 300px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+#new-arrivals .grid .item .img img{
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    overflow: hidden;
+    transition: 0.5s ease;
+
+}
+#new-arrivals .grid .item .img:hover img{
+    transform: scale(1.2);
+}
+#guns,#self-defence,#accessories{
+    margin-top: 5rem;
+    padding:0 3rem;
+    position: relative;
+}
+#guns a.browsemore, #self-defence a.browsemore,#accessories a.browsemore{
+   position: absolute;
+   bottom:-5%;
+   right: 10%;
+   color:black;
+   text-decoration: none;
+   transition: all 0.5s ease;
+   font-weight: bold;
+
+}
+#guns a.browsemore:hover, #self-defence a.browsemore:hover,#accessories a.browsemore:hover{
+    transform: scale(1.1);
+}
+
+#guns,#self-defence,#accessories{
+    /* padding-left: 7rem; */
+    /* padding: 0 3rem; */
+}
+#guns h2 ,#self-defence h2,#accessories h2{
+    padding-left: 7rem;
+
+}
+
+.carousel .item{
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+
+}
+
+.carousel .item .img{
+    width: 300px;
+    height: 300px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+.carousel .item .itemimg{
+    width: 300px;
+    height: 300px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+.carousel .item .img img{
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    overflow: hidden;
+    transition: 0.5s ease;
+
+}
+.carousel .item .img:hover img{
+    transform: scale(1.2);
+}
+.BrainhubCarousel__arrows{
+    background-color: black !important;
+}
+#browse-all{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5rem 0 ;
+}
+.browse-all{
+    padding:0.5rem 0.7rem;
+  background: transparent;
+  text-decoration: none;
+  color:black;
+  border:1px solid black;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  transition:0.5s ease;
+}
+.browse-all:hover{
+    transform: scale(1.1);
+  }
