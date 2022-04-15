@@ -3,10 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ItemDetails from "./pages/ItemDetails/ItemDetails";
-import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/Footer";
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Browse.css";
 import { Link } from "react-router-dom";
 import Select from "react-select";
@@ -17,22 +17,39 @@ const sortOptions = [
   { value: "ratingHigh", label: "Rating: High to Low" },
 ];
 
-const categoryOptions = [
-  { value: "guns", label: "Guns" },
-  { value: "accessories", label: "Accessories" },
-];
-
 const Browse = () => {
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState(null);
   const [selectedCategoryOption, setSelectedCategoryOption] = useState(null);
   const [values, setValues] = useState([MIN, MAX]);
+  const [items, setItems] = useState(null);
 
   const handleSortChange = (selectedOption) => {
     setSelectedSortOption(selectedOption);
   };
-  const handleCategoryChange = (selectedOption) => {
+  const handleCategoryChange = async (selectedOption) => {
     setSelectedCategoryOption(selectedOption);
+
+    //fetch category items
+    const res = await fetch(
+      `${process.env.REACT_APP_SERVER_URL}/items/?category_id=${selectedOption.value}`
+    );
+    const data = await res.json();
   };
+  const mapCategories = (data) => {
+    setCategoryOptions(data.map((el) => ({ value: el.id, label: el.title })));
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/categories/?format=json`
+      );
+      return await res.json();
+    }
+    //fetch categories
+    fetchData().then((res) => mapCategories(res));
+  }, []);
   return (
     <div id="browse">
       <aside id="filters">
