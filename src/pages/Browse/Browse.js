@@ -5,8 +5,8 @@ import Select from "react-select";
 import { Range, getTrackBackground } from "react-range";
 
 const STEP = 1;
-const MIN = 0;
-const MAX = 100;
+let MIN = 0;
+let MAX = 100;
 const COLORS = ["black", "black", "black", "black"];
 
 const sortOptions = [
@@ -31,24 +31,85 @@ const Browse = () => {
     setSelectedCategoryOption(selectedOption);
 
     //fetch category items
-    const res = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/items/?category_id=${selectedOption.value}`
-    );
-    const data = await res.json();
+    console.log(selectedOption.value === "all");
+    if (selectedOption.value === "all") {
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/items/`);
+      const data = await res.json();
+      if (data.length > 0) {
+        MIN = data[0].price;
+        MAX = data[0].price;
+        data.forEach((item) => {
+          if (item.price > MAX) {
+            MAX = item.price;
+          } else if (item.price < MIN) {
+            MIN = item.price;
+          }
+        });
+
+        setValues([MIN, MAX]);
+      } else {
+        MIN = 0;
+        MAX = 0;
+        setValues([MIN, MAX]);
+      }
+      setItems(data);
+    } else {
+      const res = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/items/?category_id=${selectedOption.value}`
+      );
+      const data = await res.json();
+      if (data.length > 0) {
+        MIN = data[0].price;
+        MAX = data[0].price;
+        data.forEach((item) => {
+          if (item.price > MAX) {
+            MAX = item.price;
+          } else if (item.price < MIN) {
+            MIN = item.price;
+          }
+        });
+        setValues([MIN, MAX]);
+      } else {
+        MIN = 0;
+        MAX = 0;
+        setValues([MIN, MAX]);
+      }
+      setItems(data);
+    }
   };
   const mapCategories = (data) => {
-    setCategoryOptions(data.map((el) => ({ value: el.id, label: el.title })));
+    const categories = data.map((el) => ({ value: el.id, label: el.title }));
+    categories.unshift({ value: "all", label: "All" });
+    setCategoryOptions(categories);
   };
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await fetch(
+    async function fetchCategories() {
+      const categories = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/categories/?format=json`
-      );
-      return await res.json();
+      ).then((res) => res.json());
+      const items = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/items/`
+      ).then((i) => i.json());
+      return { items, categories };
     }
     //fetch categories
-    fetchData().then((res) => mapCategories(res));
+    fetchCategories().then((res) => {
+      mapCategories(res.categories);
+      setItems(res.items);
+      if (res.items.length > 0) {
+        MIN = res.items[0].price;
+        MAX = res.items[0].price;
+        res.items.forEach((item) => {
+          if (item.price > MAX) {
+            MAX = item.price;
+          } else if (item.price < MIN) {
+            MIN = item.price;
+          }
+        });
+        setValues([MIN, MAX]);
+      }
+    });
   }, []);
   return (
     <div id="browse">
@@ -160,107 +221,20 @@ const Browse = () => {
       </aside>
       <section id="browse-section">
         <h2>Items</h2>
-        <div className="grid">
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                  alt=""
-                />
+        {items && (
+          <div className="grid">
+            {items.map((item) => (
+              <div className="item">
+                <Link to="/item">
+                  <div className="img">
+                    <img src={item.photoPath} alt="" />
+                  </div>
+                  <p>{item.title}</p>
+                </Link>
               </div>
-              <p>Lorem, ipsum.</p>
-            </Link>
+            ))}
           </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539827-5d3ed2512958?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem, ipsum dolor.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610057998992-6182af268499?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem ipsum dolor sit.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610057998889-a3d8d3d3333b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1607012343164-210ab261917b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=988&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem, ipsum.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1609808425360-3ed1ca46d56d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem, ipsum dolor.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1585589266882-2cb137ba7db6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem, ipsum dolor.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1612197622847-5eb1e8c32a71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem ipsum dolor sit amet.</p>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <p>Lorem ipsum dolor sit.</p>
-            </Link>
-          </div>
-        </div>
+        )}
       </section>
     </div>
   );
