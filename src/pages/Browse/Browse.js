@@ -45,6 +45,7 @@ const Browse = () => {
             MIN = item.price;
           }
         });
+        if (MIN === MAX) MAX += 0.1;
 
         setValues([MIN, MAX]);
       } else {
@@ -68,6 +69,8 @@ const Browse = () => {
             MIN = item.price;
           }
         });
+        if (MIN === MAX) MAX += 0.1;
+
         setValues([MIN, MAX]);
       } else {
         MIN = 0;
@@ -107,6 +110,8 @@ const Browse = () => {
             MIN = item.price;
           }
         });
+        if (MIN === MAX) MAX += 0.1;
+
         setValues([MIN, MAX]);
       }
     });
