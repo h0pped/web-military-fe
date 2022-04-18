@@ -33,6 +33,12 @@
     overflow: hidden;
 
 }
+#new-arrivals .grid .item .item-description{
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 #new-arrivals .grid .item a{
     text-decoration: none;
     color:black;
@@ -92,7 +98,13 @@
     overflow: hidden;
 
 }
-
+.carousel .item .item-description{
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
 .carousel .item .img{
     width: 300px;
     height: 300px;

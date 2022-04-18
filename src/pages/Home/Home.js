@@ -22,7 +22,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem, ipsum.</p>
+              <div className="item-description">
+                <p>Lorem ipsum.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -33,7 +36,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem, ipsum dolor.</p>
+              <div className="item-description">
+                <p>Lorem, ipsum dolor.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -44,7 +50,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -55,7 +64,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem.</p>
+              <div className="item-description">
+                <p>Lorem.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -66,7 +78,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem, ipsum.</p>
+              <div className="item-description">
+                <p>Lorem ipsum.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -77,7 +92,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem, ipsum dolor.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -88,7 +106,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem, ipsum dolor.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -99,7 +120,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit amet.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit amet.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
           <div className="item">
@@ -110,7 +134,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </Link>
           </div>
         </div>
@@ -164,7 +191,10 @@ const Home = () => {
                   />
                 </Link>
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem, ipsum dolor.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -173,7 +203,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem, ipsum dolor.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -182,7 +215,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem, ipsum dolor.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -191,7 +227,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem, ipsum dolor.</p>
+                <p>$4.99</p>
+              </div>
             </div>
           </Carousel>
           <Link to="/item" className="browsemore">
@@ -247,7 +286,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -256,7 +298,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -265,7 +310,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -274,7 +322,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
           </Carousel>
           <Link to="/item" className="browsemore">
@@ -330,7 +381,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -339,7 +393,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -348,7 +405,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
             <div className="item">
               <div className="img">
@@ -357,7 +417,10 @@ const Home = () => {
                   alt=""
                 />
               </div>
-              <p>Lorem ipsum dolor sit.</p>
+              <div className="item-description">
+                <p>Lorem ipsum dolor sit.</p>
+                <p>$4.99</p>
+              </div>
             </div>
           </Carousel>
           <Link to="/item" className="browsemore">
