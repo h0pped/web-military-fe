@@ -25,14 +25,39 @@ const Browse = () => {
   const [items, setItems] = useState(null);
   const [shownItems, setShownItems] = useState(null);
 
-  const filterItems = () => {
+  const filterItems = (filterOption = selectedSortOption?.value) => {
     const [min, max] = values;
-    setShownItems(
-      items.filter((item) => item.price >= min && item.price <= max)
-    );
+    if (shownItems) {
+      const filtered = items.filter(
+        (item) => item.price >= min && item.price <= max
+      );
+      let sorted;
+      switch (filterOption) {
+        case "featured":
+          sorted = filtered.sort((a, b) => a.id - b.id);
+          break;
+        case "priceLow":
+          sorted = filtered.sort((a, b) => a.price - b.price);
+          break;
+        case "priceHigh":
+          sorted = filtered.sort((a, b) => b.price - a.price);
+          break;
+        case "ratingLow":
+          sorted = filtered.sort((a, b) => a.avg_rating - b.avg_rating);
+          break;
+        case "ratingHigh":
+          sorted = filtered.sort((a, b) => b.avg_rating - a.avg_rating);
+          break;
+        default:
+          sorted = filtered.sort((a, b) => a.id - b.id);
+      }
+
+      setShownItems(sorted);
+    }
   };
   const handleSortChange = (selectedOption) => {
     setSelectedSortOption(selectedOption);
+    filterItems(selectedOption.value);
   };
   const handleCategoryChange = async (selectedOption) => {
     setSelectedCategoryOption(selectedOption);
@@ -126,6 +151,9 @@ const Browse = () => {
       }
     });
   }, []);
+  useEffect(() => {
+    filterItems();
+  }, [items]);
   return (
     <div id="browse">
       <aside id="filters">
