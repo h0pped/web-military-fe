@@ -233,7 +233,7 @@ const Home = () => {
               </div>
             </div>
           </Carousel>
-          <Link to="/item" className="browsemore">
+          <Link to="/browse" className="browsemore">
             Browse more...
           </Link>
         </div>
@@ -328,7 +328,7 @@ const Home = () => {
               </div>
             </div>
           </Carousel>
-          <Link to="/item" className="browsemore">
+          <Link to="/browse" className="browsemore">
             Browse more...
           </Link>
         </div>
@@ -423,13 +423,13 @@ const Home = () => {
               </div>
             </div>
           </Carousel>
-          <Link to="/item" className="browsemore">
+          <Link to="browse" className="browsemore">
             Browse more...
           </Link>
         </div>
       </section>
       <section id="browse-all">
-        <Link to="/item" className="browse-all">
+        <Link to="/browse" className="browse-all">
           Browse all items
         </Link>
       </section>
