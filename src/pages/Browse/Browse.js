@@ -23,7 +23,14 @@ const Browse = () => {
   const [selectedCategoryOption, setSelectedCategoryOption] = useState(null);
   const [values, setValues] = useState([MIN, MAX]);
   const [items, setItems] = useState(null);
+  const [shownItems, setShownItems] = useState(null);
 
+  const filterItems = () => {
+    const [min, max] = values;
+    setShownItems(
+      items.filter((item) => item.price >= min && item.price <= max)
+    );
+  };
   const handleSortChange = (selectedOption) => {
     setSelectedSortOption(selectedOption);
   };
@@ -54,6 +61,7 @@ const Browse = () => {
         setValues([MIN, MAX]);
       }
       setItems(data);
+      setShownItems(data);
     } else {
       const res = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/items/?category_id=${selectedOption.value}`
@@ -78,6 +86,7 @@ const Browse = () => {
         setValues([MIN, MAX]);
       }
       setItems(data);
+      setShownItems(data);
     }
   };
   const mapCategories = (data) => {
@@ -100,6 +109,7 @@ const Browse = () => {
     fetchCategories().then((res) => {
       mapCategories(res.categories);
       setItems(res.items);
+      setShownItems(res.items);
       if (res.items.length > 0) {
         MIN = res.items[0].price;
         MAX = res.items[0].price;
@@ -163,7 +173,10 @@ const Browse = () => {
             step={STEP}
             min={MIN}
             max={MAX}
-            onChange={(values) => setValues(values)}
+            onChange={(values) => {
+              setValues(values);
+              filterItems();
+            }}
             renderTrack={({ props, children }) => (
               <div
                 onMouseDown={props.onMouseDown}
@@ -226,9 +239,9 @@ const Browse = () => {
       </aside>
       <section id="browse-section">
         <h2>Items</h2>
-        {items && (
+        {shownItems && (
           <div className="grid">
-            {items.map((item) => (
+            {shownItems.map((item) => (
               <div className="item">
                 <Link to="/item">
                   <div className="img">
