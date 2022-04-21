@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-const Navbar = () => {
-  const isLoggedIn = localStorage.getItem("email");
-
+const Navbar = ({ isLoggedIn }) => {
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn);
+  useEffect(() => {
+    setLoggedIn(isLoggedIn);
+  }, [isLoggedIn]);
   return (
     <div className="navbar">
       <div className="container">
@@ -22,13 +24,13 @@ const Navbar = () => {
               <Link to="/">Order status</Link>
             </li>
             <li>
-              <Link to="/">Cart</Link>
+              <Link to="/cart">Cart</Link>
             </li>
             <li>
-              {!isLoggedIn ? (
+              {!loggedIn ? (
                 <Link to="/signin">Sign in</Link>
               ) : (
-                <Link to="/">Log Out</Link>
+                <Link to="/logout">Log Out</Link>
               )}
             </li>
           </ul>

@@ -1,0 +1,47 @@
+.cart-conatiner{
+    width:1200px;
+    margin: auto;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.cart-conatiner .table-container{
+        width:70%;
+        margin-bottom: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+}
+.cart-conatiner .table-container table{
+    width:100%;
+}
+.cart-conatiner table, .cart-conatiner th, .cart-conatiner td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding:0.5rem 0.7rem;
+}
+.cart-conatiner table img{
+    width:150px;
+    height: 150px;
+    object-fit: cover;
+}
+.btnFormOrder{
+padding:0.7rem 0.7rem;
+  background: transparent;
+  text-decoration: none;
+  color:black;
+  border:1px solid black;
+  font-size: 1rem;
+  border-radius: 5px;
+  transition:0.5s ease;
+  margin-top: 2rem;
+  width: 30%;
+
+}
+.btnFormOrder:hover{
+    transform: scale(1.1);
+}

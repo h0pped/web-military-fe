@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./SignIn.css";
 import "../../index.css";
 import { Navigate } from "react-router-dom";
-const SignIn = () => {
+const SignIn = ({ handleLogIn }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,6 +13,7 @@ const SignIn = () => {
     if (res.status === 200) {
       localStorage.setItem("email", email);
       setIsLoggedIn(true);
+      handleLogIn();
     }
   };
   return (
