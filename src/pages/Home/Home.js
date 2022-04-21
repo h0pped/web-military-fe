@@ -15,7 +15,7 @@ const Home = () => {
         <h2>New Arrivals</h2>
         <div className="grid">
           <div className="item">
-            <Link to="/item">
+            <Link to="/item/2">
               <div className="img">
                 <img
                   src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"

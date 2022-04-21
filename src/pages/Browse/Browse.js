@@ -153,6 +153,7 @@ const Browse = () => {
   }, []);
   useEffect(() => {
     filterItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
   return (
     <div id="browse">
@@ -271,7 +272,7 @@ const Browse = () => {
           <div className="grid">
             {shownItems.map((item) => (
               <div className="item">
-                <Link to="/item">
+                <Link to={`/item/${item.id}`}>
                   <div className="img">
                     <img src={item.photoPath} alt="" />
                   </div>
