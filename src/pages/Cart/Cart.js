@@ -91,7 +91,7 @@ const Cart = () => {
                 </tr>
               </tbody>
             </table>
-            <Link to="/" className="btnFormOrder">
+            <Link to="/form" className="btnFormOrder">
               Form order
             </Link>
           </div>

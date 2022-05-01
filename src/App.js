@@ -8,6 +8,7 @@ import Cart from "./pages/Cart/Cart";
 import Logout from "./pages/Logout/Logout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
+import FormOrder from "./pages/FormOrder/FormOrder";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
@@ -40,6 +41,7 @@ function App() {
           />
           <Route path="/browse" element={<Browse />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/form" element={<FormOrder />} />
           <Route
             path="/logout"
             element={<Logout handleLogout={handleLogout} />}
