@@ -7,14 +7,21 @@ const ItemDetails = () => {
 
   const addToCartHandler = () => {
     const cart = localStorage.getItem("cart");
-
     if (cart) {
       const json = JSON.parse(cart);
-      json.push(JSON.stringify(item));
+      const cartItem = {
+        ...item,
+        quantity: 1,
+      };
+      json.push(JSON.stringify(cartItem));
       localStorage.setItem("cart", JSON.stringify(json));
     } else {
       const newCart = [];
-      newCart.push(JSON.stringify(item));
+      const cartItem = {
+        ...item,
+        quantity: 1,
+      };
+      newCart.push(JSON.stringify(cartItem));
       localStorage.setItem("cart", JSON.stringify(newCart));
     }
   };
@@ -42,10 +49,10 @@ const ItemDetails = () => {
                 <h2>{item.title}</h2>
               </div>
               <div className="rate">
-                {[...Array(item.avg_rating)].map((x, i) => (
+                {[...Array(Math.round(item.avg_rating))].map((x, i) => (
                   <span className="fa fa-star checked" key={i}></span>
                 ))}
-                {[...Array(5 - item.avg_rating)].map((x, i) => (
+                {[...Array(Math.round(5 - item.avg_rating))].map((x, i) => (
                   <span
                     className="fa fa-star "
                     key={item.avg_rating + i}
