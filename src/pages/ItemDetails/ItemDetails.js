@@ -9,11 +9,24 @@ const ItemDetails = () => {
     const cart = localStorage.getItem("cart");
     if (cart) {
       const json = JSON.parse(cart);
-      const cartItem = {
-        ...item,
-        quantity: 1,
-      };
-      json.push(JSON.stringify(cartItem));
+      let cartItem;
+      const itemIndex = json.findIndex(
+        (item) => JSON.parse(item).id === parseInt(itemId)
+      );
+      if (itemIndex !== -1) {
+        const parsedItem = JSON.parse(json[itemIndex]);
+        let cartItem = {
+          ...parsedItem,
+          quantity: parsedItem.quantity + 1,
+        };
+        json[itemIndex] = JSON.stringify(cartItem);
+      } else {
+        cartItem = {
+          ...item,
+          quantity: 1,
+        };
+        json.push(JSON.stringify(cartItem));
+      }
       localStorage.setItem("cart", JSON.stringify(json));
     } else {
       const newCart = [];
