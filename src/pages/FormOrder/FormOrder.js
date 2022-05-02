@@ -1,8 +1,22 @@
 import { useEffect, useState } from "react";
 import "./FormOrder.css";
+import "axios";
+import axios from "axios";
 const FormOrder = () => {
   const [items, setItems] = useState([]);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [inputData, setInputDate] = useState({
+    country: "",
+    address: "",
+    remarks: "",
+    zipCode: "",
+    shipment_method: "",
+  });
+  const handleInput = (inputType, value) => {
+    const inputDataNew = inputData;
+    inputDataNew[inputType] = value;
+    setInputDate(inputDataNew);
+  };
   const parseCartStorage = () => {
     const items = JSON.parse(localStorage.getItem("cart"));
     if (items) {
@@ -13,9 +27,33 @@ const FormOrder = () => {
     items.reduce((acc, item) => (acc += item.price * item.quantity), 0);
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    if (email) {
+      setIsLoggedIn(true);
+    }
     setItems(parseCartStorage());
   }, []);
-  return (
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      ...inputData,
+      user: localStorage.getItem("id"),
+      order_status: "Created",
+    };
+    const cartItems = items;
+    const orderItems = cartItems.map((item) => {
+      return {
+        item: item.id,
+        price: item.price,
+      };
+    });
+    const res = await axios.post("http://localhost:8000/orders/", {
+      order: data,
+      items: orderItems,
+    });
+    console.log(res);
+  };
+  return isLoggedIn ? (
     <div className="form-container">
       <h1>Form order</h1>
       {items && items.length > 0 && (
@@ -30,13 +68,14 @@ const FormOrder = () => {
                 : ` ${item.title} ${index !== items.length - 1 ? "," : ""}`
             )}
           </h3>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <input
                 type="text"
                 name="country"
                 id="country"
                 placeholder="Country"
+                onChange={(e) => handleInput("country", e.target.value)}
               />
             </div>
             <div className="form-group">
@@ -45,6 +84,7 @@ const FormOrder = () => {
                 name="address"
                 id="address"
                 placeholder="Address"
+                onChange={(e) => handleInput("address", e.target.value)}
               />
             </div>
             <div className="form-group">
@@ -53,18 +93,28 @@ const FormOrder = () => {
                 name="zipcode"
                 id="zipcode"
                 placeholder="Zipcode"
+                onChange={(e) => handleInput("zipCode", e.target.value)}
               />
             </div>
             <div className="form-group" placeholder="Shipment Method">
-              <select>
-                <option value="deafult">Shipment Method</option>
+              <select
+                onChange={(e) => handleInput("shipment_method", e.target.value)}
+                defaultValue={"default"}
+              >
+                <option disabled value="default">
+                  Shipment Method
+                </option>
                 <option value="dhl">DHL</option>
                 <option value="fedex">FedEx</option>
                 <option value="ups">UPS</option>
               </select>
             </div>
             <div className="form-group">
-              <textarea id="remarks" placeholder="Remarks"></textarea>
+              <textarea
+                id="remarks"
+                placeholder="Remarks"
+                onChange={(e) => handleInput("remarks", e.target.value)}
+              ></textarea>
             </div>
             <div className="form-group">
               <p>Total: ${calculateTotal()}</p>
@@ -76,6 +126,10 @@ const FormOrder = () => {
         </>
       )}
       {(!items || items.length === 0) && <h1>No items in cart</h1>}
+    </div>
+  ) : (
+    <div className="login-container">
+      <h2>Please sign in to form the order</h2>
     </div>
   );
 };

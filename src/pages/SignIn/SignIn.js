@@ -12,6 +12,8 @@ const SignIn = ({ handleLogIn }) => {
     );
     if (res.status === 200) {
       localStorage.setItem("email", email);
+      const data = await res.json();
+      localStorage.setItem("id", data.id);
       setIsLoggedIn(true);
       handleLogIn();
     }
