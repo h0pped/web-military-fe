@@ -4,6 +4,7 @@ import "axios";
 import axios from "axios";
 const FormOrder = () => {
   const [items, setItems] = useState([]);
+  const [isSuccessed, setIsSuccessed] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inputData, setInputDate] = useState({
     country: "",
@@ -51,11 +52,12 @@ const FormOrder = () => {
       order: data,
       items: orderItems,
     });
-    console.log(res);
+    setIsSuccessed(true);
   };
   return isLoggedIn ? (
     <div className="form-container">
       <h1>Form order</h1>
+      {isSuccessed && <h3>Your order was successfully created</h3>}
       {items && items.length > 0 && (
         <>
           <h3>
