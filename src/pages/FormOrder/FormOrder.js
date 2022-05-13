@@ -42,12 +42,27 @@ const FormOrder = () => {
       order_status: "Created",
     };
     const cartItems = items;
-    const orderItems = cartItems.map((item) => {
-      return {
-        item: item.id,
-        price: item.price,
-      };
+    let orderItems = [];
+    cartItems.forEach((x) => {
+      console.log(x);
+      if (x.quantity > 0) {
+        for (let i = 0; i < x.quantity; i++) {
+          orderItems.push({
+            item: x.id,
+            price: x.price,
+          });
+        }
+      }
     });
+
+    console.log(orderItems);
+    // const orderItems = cartItems.map((item) => {
+    //   return {
+    //     item: item.id,
+    //     price: item.price,
+    //     quantity: item.quantity,
+    //   };
+    // });
     const res = await axios.post("http://localhost:8000/orders/", {
       order: data,
       items: orderItems,

@@ -10,6 +10,10 @@ const Cart = () => {
       return items.map((item) => JSON.parse(item));
     }
   };
+  const clearCart = () => {
+    localStorage.removeItem("cart");
+    setCartItems([]);
+  };
   const calculateTotal = () =>
     cartItems.reduce((acc, item) => (acc += item.price * item.quantity), 0);
 
@@ -83,7 +87,9 @@ const Cart = () => {
                   </tr>
                 ))}
                 <tr>
-                  <td colSpan={4}></td>
+                  <td colSpan={5}>
+                    <button onClick={clearCart}>Remove all</button>{" "}
+                  </td>
                   <td>
                     <span style={{ fontWeight: "bold" }}>Total:</span> $
                     {calculateTotal()}

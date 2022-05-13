@@ -21,7 +21,7 @@ const Navbar = ({ isLoggedIn }) => {
               <Link to="/browse">Browse Items</Link>
             </li>
             <li>
-              <Link to="/">Order status</Link>
+              <Link to="/status">Order status</Link>
             </li>
             <li>
               <Link to="/cart">Cart</Link>

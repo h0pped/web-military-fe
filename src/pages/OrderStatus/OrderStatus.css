@@ -1,0 +1,30 @@
+.orderStatusContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.orders{
+    width:60%;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+.orders .order{
+    width:100%;
+    border: 1px solid black;
+
+    padding:0rem 1rem;
+    margin-bottom: 1.5rem;
+
+}
+
+.orders .order .order-status{
+    display: flex;
+    width:100%;
+    justify-content: space-between;
+}

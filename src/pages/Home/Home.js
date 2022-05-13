@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Carousel, { slidesToShowPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [recentItems, setRecentItems] = useState([]);
+  const [rifles, setRifles] = useState([]);
+  const [selfDefence, setSelfDefence] = useState([]);
+  const [accessories, setAccessories] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/items/?recent=true")
+      .then((res) => res.json())
+      .then((items) => {
+        setRecentItems(items.sort((a, b) => b.id - a.id).slice(0, 9));
+        fetch("http://localhost:8000/items/?category_id=5")
+          .then((riflesjson) => riflesjson.json())
+          .then((rifles) => {
+            setRifles(rifles);
+            fetch("http://localhost:8000/items/?category_id=9")
+              .then((selfdef) => selfdef.json())
+              .then((selfdef) => {
+                setSelfDefence(selfdef);
+                fetch("http://localhost:8000/items/?category_id=11")
+                  .then((accessories) => accessories.json())
+                  .then((accessories) => {
+                    setAccessories(accessories);
+                  });
+              });
+          });
+      });
+  }, []);
   return (
     <>
       <section id="landing">
@@ -14,225 +41,79 @@ const Home = () => {
       <section id="new-arrivals">
         <h2>New Arrivals</h2>
         <div className="grid">
-          <div className="item">
-            <Link to="/item/2">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                  alt=""
-                />
+          {recentItems.length > 0 &&
+            recentItems.map((item) => (
+              <div className="item" key={item.id}>
+                <Link to={`/item/${item.id}`}>
+                  <div className="img">
+                    <img src={item.photoPath} alt="" />
+                  </div>
+                  <div className="item-description">
+                    <p>{item.title}</p>
+                    <p>${item.price}</p>
+                  </div>
+                </Link>
               </div>
-              <div className="item-description">
-                <p>Lorem ipsum.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539827-5d3ed2512958?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem, ipsum dolor.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610057998992-6182af268499?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610057998889-a3d8d3d3333b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1607012343164-210ab261917b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=988&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1609808425360-3ed1ca46d56d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1585589266882-2cb137ba7db6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1612197622847-5eb1e8c32a71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit amet.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
-          <div className="item">
-            <Link to="/item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </Link>
-          </div>
+            ))}
         </div>
       </section>
       <section id="guns">
         <h2>Rifles</h2>
         <div className="carousel">
-          <Carousel
-            plugins={[
-              "arrows",
-              {
-                resolve: slidesToShowPlugin,
-                options: {
-                  numberOfSlides: 3,
+          {rifles.length > 0 && (
+            <Carousel
+              plugins={[
+                "arrows",
+                {
+                  resolve: slidesToShowPlugin,
+                  options: {
+                    numberOfSlides: 3,
+                  },
                 },
-              },
-            ]}
-            breakpoints={{
-              800: {
-                plugins: [
-                  "arrows",
+              ]}
+              breakpoints={{
+                800: {
+                  plugins: [
+                    "arrows",
 
-                  {
-                    resolve: slidesToShowPlugin,
-                    options: {
-                      numberOfSlides: 1,
+                    {
+                      resolve: slidesToShowPlugin,
+                      options: {
+                        numberOfSlides: 1,
+                      },
                     },
-                  },
-                ],
-              },
-              1200: {
-                plugins: [
-                  "arrows",
+                  ],
+                },
+                1200: {
+                  plugins: [
+                    "arrows",
 
-                  {
-                    resolve: slidesToShowPlugin,
-                    options: {
-                      numberOfSlides: 2,
+                    {
+                      resolve: slidesToShowPlugin,
+                      options: {
+                        numberOfSlides: 2,
+                      },
                     },
-                  },
-                ],
-              },
-            }}
-          >
-            <div className="item">
-              <div className="img">
-                <Link to="/item" className="itemimg">
-                  <img
-                    src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                    alt=""
-                  />
-                </Link>
-              </div>
-              <div className="item-description">
-                <p>Lorem, ipsum dolor.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem, ipsum dolor.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem, ipsum dolor.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem, ipsum dolor.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-          </Carousel>
+                  ],
+                },
+              }}
+            >
+              {rifles.map((rifle) => (
+                <div className="item">
+                  <div className="img">
+                    <Link to={"/item" + rifle.id} className="itemimg">
+                      <img src={rifle.photoPath} alt="" />
+                    </Link>
+                  </div>
+                  <div className="item-description">
+                    <p>{rifle.title}</p>
+                    <p>${rifle.price}</p>
+                  </div>
+                </div>
+              ))}
+            </Carousel>
+          )}
+
           <Link to="/browse" className="browsemore">
             Browse more...
           </Link>
@@ -242,92 +123,60 @@ const Home = () => {
       <section id="self-defence">
         <h2>Self Defense</h2>
         <div className="carousel">
-          <Carousel
-            plugins={[
-              "arrows",
-              {
-                resolve: slidesToShowPlugin,
-                options: {
-                  numberOfSlides: 3,
+          {selfDefence.length > 0 && (
+            <Carousel
+              plugins={[
+                "arrows",
+                {
+                  resolve: slidesToShowPlugin,
+                  options: {
+                    numberOfSlides: 3,
+                  },
                 },
-              },
-            ]}
-            breakpoints={{
-              800: {
-                plugins: [
-                  "arrows",
+              ]}
+              breakpoints={{
+                800: {
+                  plugins: [
+                    "arrows",
 
-                  {
-                    resolve: slidesToShowPlugin,
-                    options: {
-                      numberOfSlides: 1,
+                    {
+                      resolve: slidesToShowPlugin,
+                      options: {
+                        numberOfSlides: 1,
+                      },
                     },
-                  },
-                ],
-              },
-              1200: {
-                plugins: [
-                  "arrows",
+                  ],
+                },
+                1200: {
+                  plugins: [
+                    "arrows",
 
-                  {
-                    resolve: slidesToShowPlugin,
-                    options: {
-                      numberOfSlides: 2,
+                    {
+                      resolve: slidesToShowPlugin,
+                      options: {
+                        numberOfSlides: 2,
+                      },
                     },
-                  },
-                ],
-              },
-            }}
-          >
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-          </Carousel>
+                  ],
+                },
+              }}
+            >
+              {selfDefence.map((defence) => (
+                <div className="item">
+                  <div className="img">
+                    <Link to={"/item" + defence.id} className="itemimg">
+                      <img src={defence.photoPath} alt="" />
+                    </Link>
+                  </div>
+                  <div className="item-description">
+                    <p>{defence.title}</p>
+                    <p>${defence.price}</p>
+                  </div>
+                </div>
+              ))}
+            </Carousel>
+          )}
+
           <Link to="/browse" className="browsemore">
             Browse more...
           </Link>
@@ -337,92 +186,60 @@ const Home = () => {
       <section id="accessories">
         <h2>Accessories</h2>
         <div className="carousel">
-          <Carousel
-            plugins={[
-              "arrows",
-              {
-                resolve: slidesToShowPlugin,
-                options: {
-                  numberOfSlides: 3,
+          {accessories.length > 0 && (
+            <Carousel
+              plugins={[
+                "arrows",
+                {
+                  resolve: slidesToShowPlugin,
+                  options: {
+                    numberOfSlides: 3,
+                  },
                 },
-              },
-            ]}
-            breakpoints={{
-              800: {
-                plugins: [
-                  "arrows",
+              ]}
+              breakpoints={{
+                800: {
+                  plugins: [
+                    "arrows",
 
-                  {
-                    resolve: slidesToShowPlugin,
-                    options: {
-                      numberOfSlides: 1,
+                    {
+                      resolve: slidesToShowPlugin,
+                      options: {
+                        numberOfSlides: 1,
+                      },
                     },
-                  },
-                ],
-              },
-              1200: {
-                plugins: [
-                  "arrows",
+                  ],
+                },
+                1200: {
+                  plugins: [
+                    "arrows",
 
-                  {
-                    resolve: slidesToShowPlugin,
-                    options: {
-                      numberOfSlides: 2,
+                    {
+                      resolve: slidesToShowPlugin,
+                      options: {
+                        numberOfSlides: 2,
+                      },
                     },
-                  },
-                ],
-              },
-            }}
-          >
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="img">
-                <img
-                  src="https://images.unsplash.com/photo-1610165539774-791ae89d0574?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                  alt=""
-                />
-              </div>
-              <div className="item-description">
-                <p>Lorem ipsum dolor sit.</p>
-                <p>$4.99</p>
-              </div>
-            </div>
-          </Carousel>
+                  ],
+                },
+              }}
+            >
+              {accessories.map((acc) => (
+                <div className="item">
+                  <div className="img">
+                    <Link to={"/item" + acc.id} className="itemimg">
+                      <img src={acc.photoPath} alt="" />
+                    </Link>
+                  </div>
+                  <div className="item-description">
+                    <p>{acc.title}</p>
+                    <p>${acc.price}</p>
+                  </div>
+                </div>
+              ))}
+            </Carousel>
+          )}
+
           <Link to="browse" className="browsemore">
             Browse more...
           </Link>
