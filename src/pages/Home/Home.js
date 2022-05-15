@@ -101,7 +101,7 @@ const Home = () => {
               {rifles.map((rifle) => (
                 <div className="item">
                   <div className="img">
-                    <Link to={"/item" + rifle.id} className="itemimg">
+                    <Link to={"/item/" + rifle.id} className="itemimg">
                       <img src={rifle.photoPath} alt="" />
                     </Link>
                   </div>
@@ -164,7 +164,7 @@ const Home = () => {
               {selfDefence.map((defence) => (
                 <div className="item">
                   <div className="img">
-                    <Link to={"/item" + defence.id} className="itemimg">
+                    <Link to={"/item/" + defence.id} className="itemimg">
                       <img src={defence.photoPath} alt="" />
                     </Link>
                   </div>
@@ -227,7 +227,7 @@ const Home = () => {
               {accessories.map((acc) => (
                 <div className="item">
                   <div className="img">
-                    <Link to={"/item" + acc.id} className="itemimg">
+                    <Link to={"/item/" + acc.id} className="itemimg">
                       <img src={acc.photoPath} alt="" />
                     </Link>
                   </div>
