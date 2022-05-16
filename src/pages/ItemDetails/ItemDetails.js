@@ -94,6 +94,7 @@ const ItemDetails = () => {
       console.log("id", userId);
       const jsonItem = await resItem.json();
       const reviewsItems = await reviews.json();
+      console.log(jsonItem.quantity);
       return { jsonItem, reviewsItems };
     }
     fetchProductData().then((res) => {
@@ -131,8 +132,13 @@ const ItemDetails = () => {
               <div className="weapon_description">
                 <p>{item.description}</p>
               </div>
-              <div className="add_button" onClick={addToCartHandler}>
-                Add to cart
+              <div
+                className="add_button"
+                onClick={() => {
+                  if (item.quantity !== 0) addToCartHandler();
+                }}
+              >
+                {item.quantity === 0 ? "Sold Out" : "Add to Cart"}
               </div>
             </div>
           </div>

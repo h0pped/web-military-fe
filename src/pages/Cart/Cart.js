@@ -1,9 +1,10 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Cart.css";
 const Cart = () => {
   const [cartItems, setCartItems] = useState(null);
-
+  const [itemQuantities, setItemQuantities] = useState([]);
   const parseCartStorage = () => {
     const items = JSON.parse(localStorage.getItem("cart"));
     if (items) {
@@ -14,6 +15,7 @@ const Cart = () => {
     localStorage.removeItem("cart");
     setCartItems([]);
   };
+
   const calculateTotal = () =>
     cartItems.reduce((acc, item) => (acc += item.price * item.quantity), 0);
 
@@ -43,9 +45,25 @@ const Cart = () => {
     setCartItems(newCartItems);
     updateLocalStorage(newCartItems);
   };
+  const getAvailability = async (items) => {
+    items.forEach(async (item) => {
+      console.log(
+        `${process.env.REACT_APP_SERVER_URL}/items/?item_id=${item.id}`
+      );
+      const itemData = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/items/?item_id=${item.id}`
+      );
+      setItemQuantities((prev) => [...prev, itemData.data.quantity]);
+    });
+  };
   useEffect(() => {
-    setCartItems(parseCartStorage());
+    const parsed = parseCartStorage();
+    setCartItems(parsed);
+    getAvailability(parsed);
   }, []);
+  useEffect(() => {
+    console.log(itemQuantities);
+  }, [itemQuantities]);
   return (
     <>
       <div className="cart-conatiner">
@@ -62,7 +80,7 @@ const Cart = () => {
                 <th>Actions</th>
               </thead>
               <tbody>
-                {cartItems.map((item) => (
+                {cartItems.map((item, index) => (
                   <tr>
                     <td>{item.id}</td>
                     <td>
@@ -71,7 +89,10 @@ const Cart = () => {
                     <td>{item.title}</td>
                     <td>{item.price}</td>
                     <td>
-                      <button onClick={() => changeQuantity(item.id, true)}>
+                      <button
+                        onClick={() => changeQuantity(item.id, true)}
+                        disabled={item.quantity > itemQuantities[index] - 1}
+                      >
                         +
                       </button>
                       {item.quantity}

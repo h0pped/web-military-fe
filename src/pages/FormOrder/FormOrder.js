@@ -63,10 +63,11 @@ const FormOrder = () => {
     //     quantity: item.quantity,
     //   };
     // });
-    const res = await axios.post("http://localhost:8000/orders/", {
+    await axios.post("http://localhost:8000/orders/", {
       order: data,
       items: orderItems,
     });
+    localStorage.removeItem("cart");
     setIsSuccessed(true);
   };
   return isLoggedIn ? (
