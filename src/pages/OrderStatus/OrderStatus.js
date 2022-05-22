@@ -4,7 +4,6 @@ const OrderStatus = () => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [normalizedItems, setNormalizedItems] = useState([]);
   useEffect(() => {
     const userId = localStorage.getItem("id");
     setIsLoading(true);
