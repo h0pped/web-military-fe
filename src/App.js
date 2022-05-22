@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FormOrder from "./pages/FormOrder/FormOrder";
 import OrderStatus from "./pages/OrderStatus/OrderStatus";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/form" element={<FormOrder />} />
           <Route path="/status" element={<OrderStatus />} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route
             path="/logout"
             element={<Logout handleLogout={handleLogout} />}
