@@ -60,15 +60,27 @@ const AdminPanel = () => {
     })
       .then((response) => response.json())
       .then((json) => {
-        setUserOrders((prev) =>
-          prev.map((order) => {
-            if (order.id === id) {
-              order.order_status = normalizeType(type);
-            }
-            return order;
-          })
-        );
-      });
+        if (activeTab === "userOrders") {
+          setUserOrders((prev) =>
+            prev.map((order) => {
+              if (order.id === id) {
+                order.order_status = normalizeType(type);
+              }
+              return order;
+            })
+          );
+        } else {
+          setOrdersData((prev) =>
+            prev.map((order) => {
+              if (order.id === id) {
+                order.order_status = normalizeType(type);
+              }
+              return order;
+            })
+          );
+        }
+      })
+      .catch((err) => console.log(err));
   };
   const calculateTotal = (order) =>
     order.order_items.reduce((acc, item) => acc + item.price, 0);
@@ -85,7 +97,6 @@ const AdminPanel = () => {
   const normalizeOrderItems = (order) => {
     const items = {};
     order.order_items.forEach((item) => {
-      console.log(item);
       items[item.item.title] = (items[item.item.title] || 0) + 1;
     });
     return items;
@@ -135,7 +146,6 @@ const AdminPanel = () => {
         .then((json) => {
           setCategories((prev) => [...prev, json]);
           setCategoryFormValue("");
-          console.log(json);
         });
     }
   };
@@ -405,6 +415,7 @@ const AdminPanel = () => {
                   {categoryUpdate === true ? "Update" : "Create"}
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     setCategoryUpdate(false);
                     setCategoryFormValue("");

@@ -14,6 +14,7 @@ const SignIn = ({ handleLogIn }) => {
       localStorage.setItem("email", email);
       const data = await res.json();
       localStorage.setItem("id", data.id);
+      localStorage.setItem("role", data.role);
       setIsLoggedIn(true);
       handleLogIn();
     }

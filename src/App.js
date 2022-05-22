@@ -11,16 +11,25 @@ import { useEffect, useState } from "react";
 import FormOrder from "./pages/FormOrder/FormOrder";
 import OrderStatus from "./pages/OrderStatus/OrderStatus";
 import AdminPanel from "./pages/AdminPanel/AdminPanel";
+import SignUp from "./pages/SignUp/SignUp";
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("id");
+    localStorage.removeItem("role");
     setIsLoggedIn(false);
   };
   const handleLogIn = () => {
     setIsLoggedIn(true);
+    const role = localStorage.getItem("role");
+    if (role === "a") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
   };
 
   useEffect(() => {
@@ -34,13 +43,17 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app">
-        <Navbar isLoggedIn={isLoggedIn} />
+        <Navbar isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/item/:itemId" element={<ItemDetails />} />
           <Route
             path="/signin"
             element={<SignIn handleLogIn={handleLogIn} />}
+          />
+          <Route
+            path="/signup"
+            element={<SignUp handleLogIn={handleLogIn} />}
           />
           <Route path="/browse" element={<Browse />} />
           <Route path="/cart" element={<Cart />} />
