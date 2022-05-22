@@ -34,8 +34,12 @@ function App() {
 
   useEffect(() => {
     const email = localStorage.getItem("email");
+    const role = localStorage.getItem("role");
     if (email) {
       setIsLoggedIn(true);
+      if (role === "a") {
+        setIsAdmin(true);
+      }
     } else {
       setIsLoggedIn(false);
     }

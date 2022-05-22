@@ -13,6 +13,15 @@ const AdminPanel = () => {
   const [categoryUpdate, setCategoryUpdate] = useState(false);
   const [categoryUpdateID, setCategoryUpdateID] = useState(null);
   const [categoryFormValue, setCategoryFormValue] = useState("");
+  const [itemUpdate, setItemUpdate] = useState(false);
+  const [itemUpdateID, setItemUpdateID] = useState(null);
+  const [newUpdateItem, setNewUpdateItem] = useState({
+    title: "",
+    description: "",
+    price: "",
+    category: "",
+    image: "",
+  });
   const getGender = (gender) =>
     gender === "w" ? "Woman" : gender === "m" ? "Male" : "Unknown";
 
@@ -45,6 +54,45 @@ const AdminPanel = () => {
         setUsersData(newUsersData);
       }
     });
+  };
+  const deleteItem = (id) => {
+    fetch(`http://localhost:8000/items/?item_id=${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        const newItemsData = itemsData.filter((item) => item.id !== id);
+        setItemsData(newItemsData);
+      }
+    });
+  };
+  const itemSubmit = (e) => {
+    e.preventDefault();
+    if (itemUpdate) {
+      console.log("UPDATE ITEM", itemUpdateID, newUpdateItem);
+      setItemUpdate(false);
+      setItemUpdateID(null);
+      setNewUpdateItem({
+        title: "",
+        description: "",
+        price: "",
+        category: "",
+        photoPath: "",
+      });
+    } else {
+      console.log("CREATE ITEM", newUpdateItem);
+      setItemUpdate(false);
+      setItemUpdateID(null);
+      setNewUpdateItem({
+        title: "",
+        description: "",
+        price: "",
+        category: "",
+        photoPath: "",
+      });
+    }
   };
   const normalizeType = (type) =>
     type.slice(0, 1).toUpperCase() + type.slice(1);
@@ -173,7 +221,12 @@ const AdminPanel = () => {
               setOrdersData(data);
               break;
             case "items":
-              setItemsData(data);
+              fetch("http://localhost:8000/categories/")
+                .then((res) => res.json())
+                .then((categoriesData) => {
+                  setItemsData(data);
+                  setCategories(categoriesData);
+                });
               break;
             case "categories":
               setCategories(data);
@@ -190,7 +243,7 @@ const AdminPanel = () => {
           setIsContentLoading(false);
         });
     }
-  }, [activeTab]);
+  }, [activeTab, activeUserId]);
   return (
     <div className="admin-panel">
       <h2>Admin Panel</h2>
@@ -395,7 +448,173 @@ const AdminPanel = () => {
             </div>
           )}
 
-          {!isContentLoading && activeTab === "items" && <h2>Items</h2>}
+          {!isContentLoading && activeTab === "items" && (
+            <div className="tab-container">
+              <h2>Items</h2>
+              <form className="items-form" onSubmit={itemSubmit}>
+                <div className="form-input">
+                  <label htmlFor="Title">Title</label>
+                  <input
+                    type="text"
+                    name="Title"
+                    id="Title"
+                    placeholder="Title"
+                    value={newUpdateItem.title}
+                    onChange={(e) =>
+                      setNewUpdateItem({
+                        ...newUpdateItem,
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-input">
+                  <label htmlFor="ImagePath">Image path</label>
+                  <input
+                    type="text"
+                    name="ImagePath"
+                    id="ImagePath"
+                    placeholder="https://google.com/...."
+                    value={newUpdateItem.photoPath}
+                    onChange={(e) =>
+                      setNewUpdateItem({
+                        ...newUpdateItem,
+                        photoPath: e.target.photoPath,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-input">
+                  <label htmlFor="Description">Description</label>
+                  <textarea
+                    type="text"
+                    name="Description"
+                    id="Description"
+                    placeholder="Description"
+                    value={newUpdateItem.description}
+                    onChange={(e) =>
+                      setNewUpdateItem({
+                        ...newUpdateItem,
+                        description: e.target.value,
+                      })
+                    }
+                  ></textarea>
+                </div>
+                <div className="form-input">
+                  <label htmlFor="Category">Category</label>
+                  <select
+                    value={newUpdateItem.category}
+                    onChange={(e) =>
+                      setNewUpdateItem({
+                        ...newUpdateItem,
+                        category: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select category</option>
+                    {categories.map((category) => (
+                      <option value={category.id}>{category.title}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-input">
+                  <label htmlFor="Price">Price</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    name="Price"
+                    id="Price"
+                    placeholder="Price"
+                    value={newUpdateItem.price}
+                    onChange={(e) =>
+                      setNewUpdateItem({
+                        ...newUpdateItem,
+                        price: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <button type="submit">
+                  {itemUpdate === true ? "Update" : "Create"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setItemUpdate(false);
+                    setNewUpdateItem({
+                      title: "",
+                      description: "",
+                      category: "",
+                      price: "",
+                      ImagePath: "",
+                    });
+                  }}
+                >
+                  Clear
+                </button>
+              </form>
+              {itemsData && itemsData.length > 0 ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Image</th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th style={{ width: "50%" }}>Description</th>
+                      <th>Rating</th>
+                      <th>Price</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {itemsData.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.id}</td>
+                        <td>
+                          <img
+                            src={item.photoPath}
+                            alt={item.title}
+                            width="100px"
+                          />
+                        </td>
+                        <td>{item.title}</td>
+                        <td>{item.category.title}</td>
+                        <td>{item.description}</td>
+                        <td>{Math.round(item.avg_rating, 2)}</td>
+                        <td style={{ fontWeight: "bold" }}>${item.price}</td>
+                        <td>
+                          <button
+                            onClick={() => {
+                              setItemUpdate(true);
+                              setItemUpdateID(item.id);
+                              setNewUpdateItem({
+                                title: item.title,
+                                description: item.description,
+                                category: item.category.id,
+                                price: item.price,
+                                photoPath: item.photoPath,
+                              });
+                            }}
+                          >
+                            Update
+                          </button>
+                          <button onClick={() => deleteItem(item.id)}>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div>
+                  <h3>No users yet...</h3>
+                </div>
+              )}
+            </div>
+          )}
           {!isContentLoading && activeTab === "categories" && (
             <div className="tab-container">
               <h2>Categories</h2>
