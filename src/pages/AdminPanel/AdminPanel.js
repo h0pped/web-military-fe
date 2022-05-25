@@ -1,5 +1,8 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./AdminPanel.css";
+
+import { Link } from "react-router-dom";
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("users");
@@ -20,8 +23,47 @@ const AdminPanel = () => {
     description: "",
     price: "",
     category: "",
-    image: "",
+    photoPath: "",
   });
+
+  const changeQuantity = async (item, isIncrease) => {
+    let res;
+    if (isIncrease) {
+      res = await axios.patch(
+        `${process.env.REACT_APP_SERVER_URL}/items/?item_id=${item.id}&change_quantity=true`,
+        {
+          quantity: item.quantity + 1,
+        }
+      );
+      if (res.status === 200) {
+        setItemsData(
+          itemsData.map((storedItem) => {
+            if (storedItem.id === item.id) {
+              storedItem.quantity++;
+            }
+            return storedItem;
+          })
+        );
+      }
+    } else {
+      res = await axios.patch(
+        `${process.env.REACT_APP_SERVER_URL}/items/?item_id=${item.id}&change_quantity=true`,
+        {
+          quantity: item.quantity - 1,
+        }
+      );
+      if (res.status === 200) {
+        setItemsData(
+          itemsData.map((storedItem) => {
+            if (storedItem.id === item.id) {
+              storedItem.quantity--;
+            }
+            return storedItem;
+          })
+        );
+      }
+    }
+  };
   const getGender = (gender) =>
     gender === "w" ? "Woman" : gender === "m" ? "Male" : "Unknown";
 
@@ -42,6 +84,7 @@ const AdminPanel = () => {
     setCategoryUpdateID(null);
     setCategoryFormValue("");
   };
+
   const deleteUser = (id) => {
     fetch(`http://localhost:8000/users/?user_id=${id}`, {
       method: "DELETE",
@@ -68,7 +111,8 @@ const AdminPanel = () => {
       }
     });
   };
-  const itemSubmit = (e) => {
+
+  const itemSubmit = async (e) => {
     e.preventDefault();
     if (itemUpdate) {
       console.log("UPDATE ITEM", itemUpdateID, newUpdateItem);
@@ -82,16 +126,29 @@ const AdminPanel = () => {
         photoPath: "",
       });
     } else {
-      console.log("CREATE ITEM", newUpdateItem);
-      setItemUpdate(false);
-      setItemUpdateID(null);
-      setNewUpdateItem({
-        title: "",
-        description: "",
-        price: "",
-        category: "",
-        photoPath: "",
-      });
+      console.log(newUpdateItem);
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/items/`,
+        {
+          title: newUpdateItem.title,
+          description: newUpdateItem.description,
+          price: newUpdateItem.price,
+          category: newUpdateItem.category,
+          photoPath: newUpdateItem.photoPath,
+        }
+      );
+      if (res.status === 201) {
+        setItemsData((prev) => [newUpdateItem, ...prev]);
+        setItemUpdate(false);
+        setItemUpdateID(null);
+        setNewUpdateItem({
+          title: "",
+          description: "",
+          price: "",
+          category: "",
+          photoPath: "",
+        });
+      }
     }
   };
   const normalizeType = (type) =>
@@ -476,12 +533,12 @@ const AdminPanel = () => {
                     id="ImagePath"
                     placeholder="https://google.com/...."
                     value={newUpdateItem.photoPath}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setNewUpdateItem({
                         ...newUpdateItem,
-                        photoPath: e.target.photoPath,
-                      })
-                    }
+                        photoPath: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="form-input">
@@ -564,6 +621,7 @@ const AdminPanel = () => {
                       <th>Category</th>
                       <th style={{ width: "50%" }}>Description</th>
                       <th>Rating</th>
+                      <th>Quantity</th>
                       <th>Price</th>
                       <th>Actions</th>
                     </tr>
@@ -573,16 +631,34 @@ const AdminPanel = () => {
                       <tr key={item.id}>
                         <td>{item.id}</td>
                         <td>
-                          <img
-                            src={item.photoPath}
-                            alt={item.title}
-                            width="100px"
-                          />
+                          <Link to={"/item/" + item.id}>
+                            <img
+                              src={item.photoPath}
+                              alt={item.title}
+                              width="100px"
+                            />
+                          </Link>
                         </td>
                         <td>{item.title}</td>
                         <td>{item.category.title}</td>
                         <td>{item.description}</td>
                         <td>{Math.round(item.avg_rating, 2)}</td>
+                        <td style={{ width: "20%" }}>
+                          <button
+                            className="quantity-button"
+                            onClick={() => changeQuantity(item, true)}
+                          >
+                            +
+                          </button>
+                          {item.quantity}
+                          <button
+                            className="quantity-button"
+                            onClick={() => changeQuantity(item, false)}
+                            disabled={item.quantity === 0}
+                          >
+                            -
+                          </button>
+                        </td>
                         <td style={{ fontWeight: "bold" }}>${item.price}</td>
                         <td>
                           <button
