@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./SignUp.css";
-const SignUp = () => {
+import { Navigate } from "react-router-dom";
+const SignUp = ({ handleLogIn }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     surname: "",
-    gender: "",
+    gender: "m",
     email: "",
     password: "",
     password2: "",
@@ -12,6 +14,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(userData);
     if (
       userData.password.length > 0 &&
       userData.password === userData.password2
@@ -31,12 +34,16 @@ const SignUp = () => {
             "Content-Type": "application/json",
           },
         }).then((res) => res.json());
-        console.log(res);
+        localStorage.setItem("id", res.id);
+        localStorage.setItem("role", res.role);
+        setIsLoggedIn(true);
+        handleLogIn();
       }
     }
   };
   return (
     <div className="main">
+      {isLoggedIn && <Navigate to="/" />}
       <form>
         <h1>Registration</h1>
         <span>

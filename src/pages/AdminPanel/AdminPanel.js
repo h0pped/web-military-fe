@@ -686,7 +686,7 @@ const AdminPanel = () => {
                 </table>
               ) : (
                 <div>
-                  <h3>No users yet...</h3>
+                  <h3>No Items yet...</h3>
                 </div>
               )}
             </div>
@@ -757,7 +757,7 @@ const AdminPanel = () => {
                 </table>
               ) : (
                 <div>
-                  <h3>No users yet...</h3>
+                  <h3>No Categories yet...</h3>
                 </div>
               )}
             </div>
