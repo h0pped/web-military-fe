@@ -28,9 +28,9 @@ const Browse = () => {
   const filterItems = (filterOption = selectedSortOption?.value) => {
     const [min, max] = values;
     if (shownItems) {
-      const filtered = items.filter(
-        (item) => item.price >= min && item.price <= max
-      );
+      const filtered = items
+        .filter((item) => item.price >= min && item.price <= max)
+        .filter((item) => item.visible === true);
       let sorted;
       switch (filterOption) {
         case "featured":
@@ -66,7 +66,8 @@ const Browse = () => {
     console.log(selectedOption.value === "all");
     if (selectedOption.value === "all") {
       const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/items/`);
-      const data = await res.json();
+      let data = await res.json();
+      data = data.filter((item) => item.visible === true);
       if (data.length > 0) {
         MIN = data[0].price;
         MAX = data[0].price;
@@ -91,7 +92,8 @@ const Browse = () => {
       const res = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/items/?category_id=${selectedOption.value}`
       );
-      const data = await res.json();
+      let data = await res.json();
+      data = data.filter((item) => item.visible === true);
       if (data.length > 0) {
         MIN = data[0].price;
         MAX = data[0].price;
@@ -125,9 +127,10 @@ const Browse = () => {
       const categories = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/categories/?format=json`
       ).then((res) => res.json());
-      const items = await fetch(
+      let items = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/items/`
       ).then((i) => i.json());
+      items = items.filter((item) => item.visible === true);
       return { items, categories };
     }
     //fetch categories

@@ -14,19 +14,26 @@ const Home = () => {
     fetch("http://localhost:8000/items/?recent=true")
       .then((res) => res.json())
       .then((items) => {
-        setRecentItems(items.sort((a, b) => b.id - a.id).slice(0, 9));
+        setRecentItems(
+          items
+            .filter((item) => item.visible === true)
+            .sort((a, b) => a.id - b.id)
+            .slice(0, 9)
+        );
         fetch("http://localhost:8000/items/?category_id=5")
           .then((riflesjson) => riflesjson.json())
           .then((rifles) => {
-            setRifles(rifles);
+            setRifles(rifles.filter((item) => item.visible === true));
             fetch("http://localhost:8000/items/?category_id=9")
               .then((selfdef) => selfdef.json())
               .then((selfdef) => {
-                setSelfDefence(selfdef);
+                setSelfDefence(selfdef.filter((item) => item.visible === true));
                 fetch("http://localhost:8000/items/?category_id=11")
                   .then((accessories) => accessories.json())
                   .then((accessories) => {
-                    setAccessories(accessories);
+                    setAccessories(
+                      accessories.filter((item) => item.visible === true)
+                    );
                   });
               });
           });
