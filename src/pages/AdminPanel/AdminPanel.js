@@ -98,6 +98,25 @@ const AdminPanel = () => {
       }
     });
   };
+  const changeVisibilityStatus = (id) => {
+    fetch(`http://localhost:8000/items/?item_id=${id}&change_visibility=true`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        setItemsData(
+          itemsData.map((item) => {
+            if (item.id === id) {
+              item.visible = !item.visible;
+            }
+            return item;
+          })
+        );
+      }
+    });
+  };
   const deleteItem = (id) => {
     fetch(`http://localhost:8000/items/?item_id=${id}`, {
       method: "DELETE",
@@ -622,13 +641,14 @@ const AdminPanel = () => {
                       <th style={{ width: "50%" }}>Description</th>
                       <th>Rating</th>
                       <th>Quantity</th>
+                      <th>Visibile</th>
                       <th>Price</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {itemsData.map((item) => (
-                      <tr key={item.id}>
+                      <tr key={"item" + item.id}>
                         <td>{item.id}</td>
                         <td>
                           <Link to={"/item/" + item.id}>
@@ -641,7 +661,7 @@ const AdminPanel = () => {
                         </td>
                         <td>{item.title}</td>
                         <td>{item.category.title}</td>
-                        <td>{item.description}</td>
+                        <td>{item.description.slice(0, 100)}...</td>
                         <td>{Math.round(item.avg_rating, 2)}</td>
                         <td style={{ width: "20%" }}>
                           <button
@@ -659,9 +679,11 @@ const AdminPanel = () => {
                             -
                           </button>
                         </td>
+                        <td>{item.visible ? "Visible" : "Hidden"}</td>
                         <td style={{ fontWeight: "bold" }}>${item.price}</td>
                         <td>
                           <button
+                            style={{ width: "100%" }}
                             onClick={() => {
                               setItemUpdate(true);
                               setItemUpdateID(item.id);
@@ -676,8 +698,17 @@ const AdminPanel = () => {
                           >
                             Update
                           </button>
-                          <button onClick={() => deleteItem(item.id)}>
+                          <button
+                            style={{ width: "100%" }}
+                            onClick={() => deleteItem(item.id)}
+                          >
                             Delete
+                          </button>
+                          <button
+                            style={{ width: "100%" }}
+                            onClick={() => changeVisibilityStatus(item.id)}
+                          >
+                            {item.visible ? "Hide" : "Make visible"}
                           </button>
                         </td>
                       </tr>
