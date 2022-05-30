@@ -11,6 +11,14 @@ const ItemDetails = () => {
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
+  const [hasLeftReview, setHasLeftReview] = useState(false);
+  const [leftReview, setLeftReview] = useState({
+    id: 0,
+    item: {},
+    user: {},
+    rating: 1,
+    comment: "",
+  });
 
   const addToCartHandler = () => {
     const cart = localStorage.getItem("cart");
@@ -48,8 +56,11 @@ const ItemDetails = () => {
   const changeRating = (e) => {
     const rating = e.target.id.split("-")[1];
     if (!isNaN(rating)) {
-      setReviewRating(rating);
-      console.log(rating);
+      if (hasLeftReview) {
+        setLeftReview({ ...leftReview, rating });
+      } else {
+        setReviewRating(rating);
+      }
     }
   };
   const clearInput = () => {
@@ -57,21 +68,37 @@ const ItemDetails = () => {
     setReviewText("");
   };
   const handleReviewSubmit = async () => {
-    if (reviewRating > 0) {
-      const data = {
-        item: itemId,
-        user: userId,
-        rating: reviewRating,
-        comment: reviewText,
-      };
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/reviews/`,
-        data
+    if (hasLeftReview) {
+      console.log(leftReview);
+      const res = await axios.patch(
+        `${process.env.REACT_APP_SERVER_URL}/reviews/?review_id=${leftReview.id}`,
+        leftReview
       );
-      if (res.data) {
-        setReviews((prevReviews) => [res.data, ...prevReviews]);
+      if (res.status === 200) {
         setIsReviewSubmitted(true);
-        clearInput();
+        setReviews((prev) =>
+          prev.map((review) =>
+            review.id === leftReview.id ? leftReview : review
+          )
+        );
+      }
+    } else {
+      if (reviewRating > 0) {
+        const data = {
+          item: itemId,
+          user: userId,
+          rating: reviewRating,
+          comment: reviewText,
+        };
+        const res = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/reviews/`,
+          data
+        );
+        if (res.data) {
+          setReviews((prevReviews) => [res.data, ...prevReviews]);
+          setIsReviewSubmitted(true);
+          clearInput();
+        }
       }
     }
   };
@@ -91,17 +118,26 @@ const ItemDetails = () => {
       } else {
         setIsLoggedIn(false);
       }
-      console.log("id", userId);
       const jsonItem = await resItem.json();
       const reviewsItems = await reviews.json();
-      console.log(jsonItem.quantity);
       return { jsonItem, reviewsItems };
     }
-    fetchProductData().then((res) => {
-      setItem(res.jsonItem);
-      setReviews(res.reviewsItems);
-      console.log(res.reviewsItems);
-    });
+    fetchProductData()
+      .then((res) => {
+        setItem(res.jsonItem);
+        setReviews(res.reviewsItems);
+        const userId = localStorage.getItem("id");
+        const id = parseInt(userId);
+        const review = res.reviewsItems.find((review) => review.user.id === id);
+        if (review) {
+          console.log(review);
+          setHasLeftReview(true);
+          setLeftReview(review);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [itemId]);
   return (
     <>
@@ -117,12 +153,15 @@ const ItemDetails = () => {
               </div>
               <div className="rate">
                 {[...Array(Math.round(item.avg_rating))].map((x, i) => (
-                  <span className="fa fa-star checked" key={i}></span>
+                  <span
+                    className="fa fa-star checked"
+                    key={"starchecked-" + i}
+                  ></span>
                 ))}
                 {[...Array(Math.round(5 - item.avg_rating))].map((x, i) => (
                   <span
                     className="fa fa-star "
-                    key={item.avg_rating + i}
+                    key={"star-rate-item-" + item.avg_rating + i}
                   ></span>
                 ))}
               </div>
@@ -153,28 +192,63 @@ const ItemDetails = () => {
                   <h2>Review was successfully submitted!</h2>
                 )}
                 <p>Rating:</p>
-                <div classsname="rating-div" onClick={changeRating}>
-                  {[...Array(Math.round(reviewRating))].map((x, i) => (
-                    <span
-                      className="fa fa-star checked fa-lg"
-                      key={`star-${i + 1}`}
-                      id={`star-${i + 1}`}
-                    ></span>
-                  ))}
-                  {[...Array(5 - Math.round(reviewRating))].map((x, i) => (
-                    <span
-                      className="fa fa-star fa-lg"
-                      key={`star-${Math.round(reviewRating + i + 1)}`}
-                      id={`star-${Math.round(reviewRating) + i + 1}`}
-                    ></span>
-                  ))}
-                </div>
+                {hasLeftReview ? (
+                  <div classsname="rating-div" onClick={changeRating}>
+                    {[...Array(Math.round(leftReview.rating))].map((x, i) => (
+                      <span
+                        className="fa fa-star checked fa-lg"
+                        key={`star-checked-left-${i + 1}`}
+                        id={`star-${i + 1}`}
+                      ></span>
+                    ))}
+                    {[...Array(5 - Math.round(leftReview.rating))].map(
+                      (x, i) => (
+                        <span
+                          className="fa fa-star fa-lg"
+                          key={`star-left-${Math.round(
+                            leftReview.rating + i + 1
+                          )}`}
+                          id={`star-${Math.round(leftReview.rating) + i + 1}`}
+                        ></span>
+                      )
+                    )}
+                  </div>
+                ) : (
+                  <div classsname="rating-div" onClick={changeRating}>
+                    {[...Array(Math.round(reviewRating))].map((x, i) => (
+                      <span
+                        className="fa fa-star checked fa-lg"
+                        key={`star-rating-${i + 1}`}
+                        id={`star-${i + 1}`}
+                      ></span>
+                    ))}
+                    {[...Array(5 - Math.round(reviewRating))].map((x, i) => (
+                      <span
+                        className="fa fa-star fa-lg"
+                        key={`star-rating-unchecked-${Math.round(
+                          reviewRating + i + 1
+                        )}`}
+                        id={`star-${Math.round(reviewRating) + i + 1}`}
+                      ></span>
+                    ))}
+                  </div>
+                )}
+
                 <form className="form-review">
                   <input
                     type="text"
-                    placeholder="Add Your Comment"
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
+                    placeholder={
+                      hasLeftReview ? "Edit your comment" : "Leave new comment!"
+                    }
+                    value={hasLeftReview ? leftReview.comment : reviewText}
+                    onChange={(e) =>
+                      hasLeftReview
+                        ? setLeftReview({
+                            ...leftReview,
+                            comment: e.target.value,
+                          })
+                        : setReviewText(e.target.value)
+                    }
                   ></input>
                   <div className="btn">
                     <input type="submit" value="Comment"></input>
@@ -183,7 +257,7 @@ const ItemDetails = () => {
                     </button>
                   </div>
                   <div className="add_button" onClick={handleReviewSubmit}>
-                    Leave a review
+                    {hasLeftReview ? "Edit review" : "Submit review"}
                   </div>
                 </form>
               </div>
@@ -196,16 +270,22 @@ const ItemDetails = () => {
             {reviews &&
               reviews.length > 0 &&
               reviews.map((review) => (
-                <div className="container">
+                <div className="container" key={"review-" + review.id}>
                   <p style={{ fontWeight: "bold" }}>
                     {review.user.name} {review.user.surname}
                   </p>
                   <p>
                     {[...Array(Math.round(review.rating))].map((x, i) => (
-                      <span className="fa fa-star checked fa-lg" key={i}></span>
+                      <span
+                        className="fa fa-star checked fa-lg"
+                        key={"reviewrating-star-checked-" + i}
+                      ></span>
                     ))}
                     {[...Array(5 - Math.round(review.rating))].map((x, i) => (
-                      <span className="fa fa-star fa-lg" key={i}></span>
+                      <span
+                        className="fa fa-star fa-lg"
+                        key={"reviewrating-star-unchecked-" + i}
+                      ></span>
                     ))}
                   </p>
                   <p>{review.comment}</p>
